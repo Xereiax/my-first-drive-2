@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>My First Drive — Driving Lessons in Hounslow, Feltham, Twickenham &amp; West London</title>
+  <meta name="description" content="Patient, experienced driving instructors covering Hounslow, Feltham, Twickenham and 10 West London areas. Automatic and manual lessons. Block booking or Pay As You Go.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="My First Drive — Driving Lessons in West London">
+  <meta property="og:description" content="Patient, experienced instructors. Automatic and manual lessons across Hounslow, Feltham, Twickenham and more.">
+  <meta property="og:type" content="website">
+  <!-- TODO: Add og:image and og:url once domain is confirmed -->
+
+  <!-- Canonical URL — TODO: update once domain is live -->
+  <!-- <link rel="canonical" href="https://www.myfirstdrive.co.uk/"> -->
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Local Business structured data — TODO: fill in phone/URL once confirmed -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "DrivingSchool",
+    "name": "My First Drive",
+    "description": "Automatic and manual driving lessons covering Hounslow, Feltham, Twickenham and West London.",
+    "areaServed": ["Hounslow","Feltham","Bedfont","Hanworth","Hampton","Teddington","Twickenham","Osterley","Isleworth","Ashford"],
+    "url": "TODO_WEBSITE_URL",
+    "telephone": "TODO_PHONE_NUMBER",
+    "foundingDate": "2025"
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar" id="scroll-progress-bar"></div></div>
+
+  <div class="announcement-bar" id="announcement-bar" role="note" aria-label="Site announcement">
+    Booking lessons now across 10 West London areas —
+    <a href="#" data-whatsapp>message us on WhatsApp</a>
+    <button type="button" class="announcement-bar__close" id="bar-close" aria-label="Dismiss announcement">✕</button>
+  </div>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================= -->
+  <header class="site-header site-header--transparent">
+    <div class="container site-header__inner">
+      <a href="index.html" class="logo" aria-label="My First Drive — home">
+        MY FIRST<br>DRIVE
+        <span>West London · Est. 2025</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" class="site-nav__link" aria-current="page">Home</a>
+        <a href="areas.html" class="site-nav__link">Areas</a>
+        <a href="about.html" class="site-nav__link">About</a>
+        <a href="reviews.html" class="site-nav__link">Reviews</a>
+        <a href="contact.html" class="site-nav__link">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#" class="btn-bracket btn-bracket--whatsapp btn-bracket--sm" data-whatsapp>Book on WhatsApp</a>
+        <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <button type="button" class="mobile-nav__close mono">Close ✕</button>
+    <a href="index.html" class="mobile-nav__link" aria-current="page">Home</a>
+    <a href="areas.html" class="mobile-nav__link">Areas</a>
+    <a href="about.html" class="mobile-nav__link">About</a>
+    <a href="reviews.html" class="mobile-nav__link">Reviews</a>
+    <a href="contact.html" class="mobile-nav__link">Contact</a>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ============================================================
+         01 — HERO
+    ============================================================= -->
+    <section class="hero">
+      <div class="hero__bg" style="background-image:url('images/hero-bg.webp')"></div>
+      <div class="hero__scrim"></div>
+      <div class="hero__spotlight"></div>
+      <div class="hero__inner">
+        <div class="container">
+          <span class="hero__eyebrow mono">01 — West London · Automatic &amp; Manual</span>
+          <h1 class="hero__title">Your first drive <em>starts here.</em></h1>
+
+          <div class="hero__row">
+            <p class="hero__sub" id="hero-sub">Many learners find automatics easier and less stressful — no clutch, no stalling. Good for nervous drivers, or anyone who just wants to focus on the road.</p>
+
+            <div class="hero__actions">
+              <div class="transmission-toggle" role="radiogroup" aria-label="Transmission type">
+                <label><input type="radio" name="transmission" value="automatic" checked><span>Automatic</span></label>
+                <label><input type="radio" name="transmission" value="manual"><span>Manual</span></label>
+              </div>
+              <a href="#" class="btn-bracket btn-bracket--whatsapp" data-whatsapp>Book on WhatsApp</a>
+              <a href="#lessons" class="btn-bracket">See lesson types</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <span class="hero__scroll-hint-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         02 — WHY MY FIRST DRIVE
+    ============================================================= -->
+    <section class="section section--dark">
+      <div class="container">
+        <div class="section-number">02 — Why My First Drive</div>
+        <div class="stats-strip reveal-group">
+          <div class="stat-item" data-count="15" data-suffix="+">
+            <div class="stat-item__number">0</div>
+            <div class="stat-item__label ink-soft-on-dark">Years combined teaching experience</div>
+          </div>
+          <div class="stat-item" data-count="10" data-suffix="">
+            <div class="stat-item__number">0</div>
+            <div class="stat-item__label ink-soft-on-dark">West London areas covered</div>
+          </div>
+          <div class="stat-item" data-count="5" data-suffix="★">
+            <div class="stat-item__number">0</div>
+            <div class="stat-item__label ink-soft-on-dark">Average rating on Google</div>
+          </div>
+          <div class="stat-item" data-count="2" data-suffix="">
+            <div class="stat-item__number">0</div>
+            <div class="stat-item__label ink-soft-on-dark">Five-star reviews — that's honestly all we've got so far</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Scroll-reveal photo — "built around you" beat
+    ============================================================= -->
+    <section class="section section--tight">
+      <div class="container">
+        <div class="scroll-stage" data-scroll-stage>
+          <div class="scroll-card" data-scroll-card>
+            <img src="images/instructor-student.webp" alt="A My First Drive instructor pointing ahead while a learner driver sits at the wheel on a residential West London street" loading="lazy" width="1600" height="900">
+          </div>
+        </div>
+        <p class="lede text-center mt-6" style="max-width:56ch;margin-inline:auto;">Every lesson is built around you — not a fixed syllabus. There's no such thing as a "typical" student here.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         03 — LESSONS
+    ============================================================= -->
+    <section class="section" id="lessons">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <div class="section-number">03 — Lessons</div>
+            <h2>Lessons tailored to you</h2>
+          </div>
+          <p class="lede">No fixed syllabus. We start from wherever you actually are — first lesson ever, or third attempt at a test. Tap a card for what it usually looks like.</p>
+        </div>
+
+        <div data-cursor-block data-cursor-default="Expand">
+        <div cursor class="cursor">Expand</div>
+        <div class="lesson-grid reveal-group">
+          <div class="lesson-card lesson-card--featured lesson-card--beginner tilt-card">
+            <span class="lesson-card__tag mono">Most requested</span>
+            <h3 class="lesson-card__title">Complete Beginners</h3>
+            <p class="lesson-card__desc">Never touched a car before. We start in quiet residential streets before anything busier, at whatever pace actually works for you.</p>
+            <button type="button" class="lesson-card__more" aria-expanded="false" aria-controls="detail-1">What this looks like <span class="lesson-card__more-icon" aria-hidden="true">+</span></button>
+            <div class="lesson-card__detail" id="detail-1">
+              <div class="lesson-card__detail-inner">
+                <p>A first lesson usually starts with the basics — mirrors, seat position, controls — before moving off on a quiet residential road nearby. No motorways, no pressure.</p>
+              </div>
+            </div>
+          </div>
+          <div class="lesson-card tilt-card">
+            <span class="lesson-card__tag mono">Confidence-first</span>
+            <h3 class="lesson-card__title">Nervous Drivers</h3>
+            <p class="lesson-card__desc">If a previous instructor rushed you, or driving just makes you anxious, lessons here are slower and more patient by design.</p>
+            <button type="button" class="lesson-card__more" aria-expanded="false" aria-controls="detail-2">What this looks like <span class="lesson-card__more-icon" aria-hidden="true">+</span></button>
+            <div class="lesson-card__detail" id="detail-2">
+              <div class="lesson-card__detail-inner">
+                <p>We'll usually talk through what's making you anxious before even starting the engine, then build up gradually — busier roads only once you're ready for them.</p>
+              </div>
+            </div>
+          </div>
+          <div class="lesson-card lesson-card--refresher tilt-card">
+            <span class="lesson-card__tag mono">Already passed</span>
+            <h3 class="lesson-card__title">Refresher Lessons</h3>
+            <p class="lesson-card__desc">Passed a while ago and lost the habit? A few refresher lessons before you're back on the road solo, motorway included if you want it.</p>
+            <button type="button" class="lesson-card__more" aria-expanded="false" aria-controls="detail-3">What this looks like <span class="lesson-card__more-icon" aria-hidden="true">+</span></button>
+            <div class="lesson-card__detail" id="detail-3">
+              <div class="lesson-card__detail-inner">
+                <p>We start with a quick assessment of where you're at, then spend the lesson on whatever's actually gone rusty — no need to relearn things you've already got.</p>
+              </div>
+            </div>
+          </div>
+          <div class="lesson-card tilt-card">
+            <span class="lesson-card__tag mono">No clutch</span>
+            <h3 class="lesson-card__title">Automatic Lessons</h3>
+            <p class="lesson-card__desc">No clutch, no stalling — a shorter learning curve for a lot of people, and the transmission most new UK drivers now pass in.</p>
+            <button type="button" class="lesson-card__more" aria-expanded="false" aria-controls="detail-4">What this looks like <span class="lesson-card__more-icon" aria-hidden="true">+</span></button>
+            <div class="lesson-card__detail" id="detail-4">
+              <div class="lesson-card__detail-inner">
+                <p>With no clutch to manage, lessons can focus earlier on road positioning, junctions, and hazard awareness instead of gear control.</p>
+              </div>
+            </div>
+          </div>
+          <div class="lesson-card tilt-card">
+            <span class="lesson-card__tag mono">Full control</span>
+            <h3 class="lesson-card__title">Manual Lessons</h3>
+            <p class="lesson-card__desc">Full control of any car, not just automatics. We make the clutch feel natural from lesson one, not lesson five.</p>
+            <button type="button" class="lesson-card__more" aria-expanded="false" aria-controls="detail-5">What this looks like <span class="lesson-card__more-icon" aria-hidden="true">+</span></button>
+            <div class="lesson-card__detail" id="detail-5">
+              <div class="lesson-card__detail-inner">
+                <p>Expect extra time in the first lesson or two on clutch control and biting point — usually in a quiet car park or dead-end road before joining traffic.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         04 — AUTOMATIC OR MANUAL
+    ============================================================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-number">04 — Automatic or manual</div>
+        <h2 class="mt-6" style="margin-bottom:2rem;">Not sure which one? Pick one.</h2>
+
+        <div class="compare reveal-group">
+          <div class="compare__col" data-transmission="automatic">
+            <h3 class="compare__title"><span class="compare__check" aria-hidden="true"></span> Automatic</h3>
+            <ul class="compare__list">
+              <li>No clutch or gear changes to think about</li>
+              <li>Often a shorter route to test-ready</li>
+              <li>Good if driving itself makes you anxious</li>
+              <li>You can only then drive automatic cars</li>
+            </ul>
+          </div>
+          <div class="compare__col compare__col--alt" data-transmission="manual">
+            <h3 class="compare__title"><span class="compare__check" aria-hidden="true"></span> Manual</h3>
+            <ul class="compare__list">
+              <li>Licence covers both manual and automatic cars</li>
+              <li>Full control over gears and engine braking</li>
+              <li>Takes a little longer to feel natural</li>
+              <li>Still the majority of used cars on UK roads</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="compare__cta" id="compare-cta">
+          <div class="compare__cta-inner">
+            <div class="compare__cta-pad">
+              <a href="#" class="btn-bracket btn-bracket--whatsapp" data-compare-cta-link data-whatsapp>
+                <span data-compare-cta-text>Ask about lessons</span>
+              </a>
+              <span class="mono" style="font-size:0.78rem;color:var(--ink-soft);">Pre-fills your WhatsApp message</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         05 — REVIEWS
+    ============================================================= -->
+    <section class="section" id="reviews">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <div class="section-number">05 — Reviews</div>
+            <h2>What two people said</h2>
+            <p class="reviews-honesty">Both are real Google reviews. We've only had two so far — small business, honest numbers — and we're proud of both.</p>
+          </div>
+          <a href="reviews.html" class="btn-bracket">Read both in full</a>
+        </div>
+      </div>
+
+      <div class="marquee" data-cursor-block>
+        <div cursor class="cursor" data-cursor-default="Read">Read</div>
+        <div class="marquee__track">
+          <div class="marquee__group">
+            <span class="marquee__item" data-cursor-text="Read" style="font-size:1.1rem;text-transform:none;font-family:var(--font-body);font-weight:400;">"Amazing instructor — Enam helped me pass first time with only 2 driving faults!" <small>Jamil C. · ★★★★★</small></span>
+            <span class="marquee__item" data-cursor-text="Read" style="font-size:1.1rem;text-transform:none;font-family:var(--font-body);font-weight:400;">"Lessons were clear, well structured, and easy to understand. Passed first time." <small>Mijan R. · ★★★★★</small></span>
+          </div>
+          <div class="marquee__group">
+            <span class="marquee__item" data-cursor-text="Read" style="font-size:1.1rem;text-transform:none;font-family:var(--font-body);font-weight:400;">"Amazing instructor — Enam helped me pass first time with only 2 driving faults!" <small>Jamil C. · ★★★★★</small></span>
+            <span class="marquee__item" data-cursor-text="Read" style="font-size:1.1rem;text-transform:none;font-family:var(--font-body);font-weight:400;">"Lessons were clear, well structured, and easy to understand. Passed first time." <small>Mijan R. · ★★★★★</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         06 — AREAS WE COVER
+    ============================================================= -->
+    <section class="section" id="areas">
+      <div class="container">
+        <div class="section__head">
+          <div>
+            <div class="section-number">06 — Areas we cover</div>
+            <h2>Ten towns, one instructor team</h2>
+          </div>
+          <a href="areas.html" class="btn-bracket">See all areas</a>
+        </div>
+
+        <div data-cursor-block data-cursor-default="Expand">
+        <div cursor class="cursor">Expand</div>
+        <div class="areas-grid areas-grid--home reveal-group" aria-label="Coverage areas preview"></div>
+        </div>
+      </div>
+
+      <div class="marquee" aria-hidden="true" data-cursor-block data-cursor-default="View">
+        <div cursor class="cursor">View</div>
+        <div class="marquee__track">
+          <div class="marquee__group">
+            <span class="marquee__item">Hounslow <small>TW3</small></span>
+            <span class="marquee__item">Feltham <small>TW13</small></span>
+            <span class="marquee__item">Bedfont <small>TW14</small></span>
+            <span class="marquee__item">Hanworth <small>TW13</small></span>
+            <span class="marquee__item">Hampton <small>TW12</small></span>
+            <span class="marquee__item">Teddington <small>TW11</small></span>
+            <span class="marquee__item">Twickenham <small>TW1</small></span>
+            <span class="marquee__item">Osterley <small>TW7</small></span>
+            <span class="marquee__item">Isleworth <small>TW7</small></span>
+            <span class="marquee__item">Ashford <small>TW15</small></span>
+          </div>
+          <div class="marquee__group">
+            <span class="marquee__item">Hounslow <small>TW3</small></span>
+            <span class="marquee__item">Feltham <small>TW13</small></span>
+            <span class="marquee__item">Bedfont <small>TW14</small></span>
+            <span class="marquee__item">Hanworth <small>TW13</small></span>
+            <span class="marquee__item">Hampton <small>TW12</small></span>
+            <span class="marquee__item">Teddington <small>TW11</small></span>
+            <span class="marquee__item">Twickenham <small>TW1</small></span>
+            <span class="marquee__item">Osterley <small>TW7</small></span>
+            <span class="marquee__item">Isleworth <small>TW7</small></span>
+            <span class="marquee__item">Ashford <small>TW15</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         07 — BOOKING
+    ============================================================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-number">07 — Booking</div>
+        <h2 class="mt-6" style="margin-bottom:2rem;">Flexible booking, no pressure</h2>
+
+        <div data-cursor-block data-cursor-default="Enquire">
+        <div cursor class="cursor">Enquire</div>
+        <div class="booking-grid reveal-group">
+          <div class="booking-card tilt-card">
+            <span class="booking-card__badge">Better value</span>
+            <h3>Block Booking</h3>
+            <p class="booking-card__price mono">Get a quote via WhatsApp</p>
+            <p class="lede" style="max-width:none;">Pay for a set of lessons upfront at a better rate. Works well once you know roughly how many hours you'll need.</p>
+            <a href="#" class="btn-bracket btn-bracket--whatsapp mt-6" data-whatsapp>Enquire via WhatsApp</a>
+          </div>
+          <div class="booking-card tilt-card">
+            <span class="booking-card__badge">Maximum flexibility</span>
+            <h3>Pay As You Go</h3>
+            <p class="booking-card__price mono">Get a quote via WhatsApp</p>
+            <p class="lede" style="max-width:none;">Book one lesson at a time, no commitment. A good starting point if you're not sure yet how often you want to drive.</p>
+            <a href="#" class="btn-bracket btn-bracket--whatsapp mt-6" data-whatsapp>Enquire via WhatsApp</a>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Quiet pacing section
+    ============================================================= -->
+    <section class="quiet-section">
+      <div class="quiet-section__img" style="background-image:url('images/car-vw.webp')"></div>
+      <div class="quiet-section__inner">
+        <span class="hero__eyebrow mono">One instructor team. No rushed lessons.</span>
+        <h2>Message us, and we'll <em style="color:var(--gold);">reply the same day.</em></h2>
+        <a href="#" class="btn-bracket mt-6" data-whatsapp style="font-size:1.3rem;">Message us</a>
+        <p class="quiet-section__hint">Tip: WhatsApp is faster than the contact form</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="logo">MY FIRST<br>DRIVE</div>
+          <p class="lede ink-soft-on-dark" style="margin-top:1rem;">Automatic &amp; manual driving lessons across West London.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="index.html">Home</a>
+          <a href="areas.html">Areas</a>
+          <a href="about.html">About</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="footer-nav">
+          <a href="#" data-whatsapp>WhatsApp us</a>
+          <a href="#">Instagram — coming soon</a>
+          <a href="#">Facebook — coming soon</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 My First Drive. Serving West London since 2025.</span>
+        <div class="footer-social">
+          <span>All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
