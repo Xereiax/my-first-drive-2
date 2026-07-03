@@ -909,6 +909,12 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
   will-change: transform;
 }
 .quiet-section__inner { position: relative; z-index: 2; color: var(--white); padding: var(--sp-6); }
+@keyframes quiet-cta-pulse {
+  0%, 100% { color: var(--gold); scale: 1; }
+  50%      { color: var(--gold-tint); scale: 1.04; }
+}
+.quiet-section .btn-bracket { color: var(--gold); animation: quiet-cta-pulse 2.2s ease-in-out infinite; }
+.quiet-section .btn-bracket:hover { color: var(--paper); animation-play-state: paused; }
 .quiet-section__hint {
   font-family: var(--font-mono);
   font-size: 0.75rem;
