@@ -492,6 +492,7 @@ function initAboutTeachScroll() {
   if (!window.matchMedia('(min-width: 900px)').matches) return;
 
   stage.classList.add('about-teach__stage--active');
+  pinWrap.classList.add('about-teach__pin--active');
 
   // Computed once and cached rather than re-measured live from inside
   // the ScrollTrigger's end/onUpdate callbacks — GSAP can call those
@@ -506,6 +507,7 @@ function initAboutTeachScroll() {
     // a narrow-ish desktop) — a pin here would just eat scroll for no
     // visual payoff, so fall back to the plain wrapping grid instead.
     stage.classList.remove('about-teach__stage--active');
+    pinWrap.classList.remove('about-teach__pin--active');
     return;
   }
 
@@ -906,6 +908,15 @@ function initCustomCursor() {
   blocks.forEach(block => {
     const cursor = block.querySelector('[cursor]');
     if (!cursor) return;
+
+    // Relocate to <body> rather than leaving it nested in the block.
+    // .cursor is `position: fixed` and expects clientX/clientY to map
+    // directly to the viewport — but a transformed ancestor (GSAP pins
+    // move their target with a CSS transform, not position:fixed)
+    // creates a new containing block for fixed descendants, which
+    // throws that math off. Living at the body level sidesteps the
+    // issue regardless of what any given block's ancestors do.
+    document.body.appendChild(cursor);
 
     let tx = 0, ty = 0, x = 0, y = 0;
     let raf = null;

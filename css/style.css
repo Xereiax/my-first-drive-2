@@ -980,6 +980,17 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
   display: flex;
   align-items: center;
 }
+/* Vertically centers the heading+cards as a group within the pinned
+   viewport slice, rather than the block sitting top-anchored with a
+   large unused gap below it. Only applied once the pin is actually
+   engaged (see --active below) so mobile's plain stacked layout isn't
+   forced to an artificial full-height block. */
+.about-teach__pin--active {
+  min-height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .about-teach__track {
   display: flex;
   flex-wrap: wrap;
