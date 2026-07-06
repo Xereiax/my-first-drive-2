@@ -135,8 +135,55 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 }
 
 .section--tight { padding: var(--sp-8) 0; }
-.section--dark { background: var(--navy-dark); color: var(--paper); border-color: rgba(243,240,230,0.15); }
+.section--dark {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--navy-dark);
+  color: var(--paper);
+  border-color: rgba(243,240,230,0.15);
+}
 .section--dark .ink-soft-on-dark { color: rgba(243,240,230,0.7); }
+
+/* Ambient gradient blobs — slow drifting glow, transform-only
+   (compositor-friendly) so it doesn't compete with scroll/rAF
+   work elsewhere. Purely decorative depth for the flat navy
+   panel; kept low-opacity to stay calm rather than showy. */
+.section--dark::before,
+.section--dark::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.section--dark::before {
+  width: 640px;
+  height: 640px;
+  top: -260px;
+  left: -160px;
+  background: radial-gradient(circle, rgba(201,150,62,0.16) 0%, rgba(201,150,62,0) 70%);
+  animation: blob-drift-a 34s ease-in-out infinite alternate;
+}
+.section--dark::after {
+  width: 520px;
+  height: 520px;
+  bottom: -240px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(78,122,168,0.2) 0%, rgba(78,122,168,0) 70%);
+  animation: blob-drift-b 40s ease-in-out infinite alternate;
+}
+@keyframes blob-drift-a {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(70px, 50px) scale(1.15); }
+}
+@keyframes blob-drift-b {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-60px, -40px) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section--dark::before, .section--dark::after { animation: none; }
+}
 
 .section__head {
   display: flex;
@@ -365,6 +412,12 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 }
 .hero--lit .hero__spotlight { opacity: 1; }
 
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .hero__inner {
   position: relative;
   z-index: 2;
@@ -423,12 +476,16 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 .transmission-toggle label:first-child { border-right: 1px solid rgba(255,255,255,0.35); }
 
 /* =============================================================
-   Hero load — one quiet fade-up, deliberately restrained rather
-   than a choreographed multi-step reveal, to match the calm/
-   patient brand tone (see design-system comment at top of file).
+   Hero load — staggered entrance driven by GSAP (initHeroEntrance
+   in main.js). Hidden only when JS is available (.js on <html>,
+   set by the inline script in <head>) so the hero still renders
+   normally with no JS/GSAP. Kept restrained — short distances,
+   quick overlap — to match the calm/patient brand tone (see
+   design-system comment at top of file).
    ============================================================= */
-@keyframes hero-fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.hero__inner { animation: hero-fade-up 0.8s var(--ease-out) both; }
+.js .hero .hero__eyebrow,
+.js .hero .hero__title,
+.js .hero .hero__row { opacity: 0; }
 
 /* =============================================================
    Trust / Stats strip
@@ -480,6 +537,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
   display: flex;
   width: max-content;
   animation: marquee-scroll 34s linear infinite;
+  will-change: transform;
 }
 .marquee:hover .marquee__track { animation-play-state: paused; }
 
@@ -893,6 +951,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
    ============================================================= */
 .quiet-section {
   position: relative;
+  z-index: 0;
   min-height: 70vh;
   display: flex;
   align-items: center;
@@ -907,6 +966,35 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
   background-position: center;
   filter: saturate(0.85) brightness(0.5);
   will-change: transform;
+}
+/* Gradient scrim — replaces flat filter-only darkening with a
+   directional vignette (matches the hero's scrim treatment) so
+   the photo has depth instead of a uniform dark wash. */
+.quiet-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(10,27,48,0.55) 0%, rgba(10,27,48,0.2) 45%, rgba(10,27,48,0.75) 100%);
+  pointer-events: none;
+}
+/* Slow-drifting gold glow, same technique as .section--dark. */
+.quiet-section::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: 560px;
+  height: 560px;
+  top: 50%;
+  left: 50%;
+  margin: -280px 0 0 -280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,150,62,0.18) 0%, rgba(201,150,62,0) 70%);
+  pointer-events: none;
+  animation: blob-drift-a 30s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .quiet-section::after { animation: none; }
 }
 .quiet-section__inner { position: relative; z-index: 2; color: var(--white); padding: var(--sp-6); }
 @keyframes quiet-cta-pulse {
@@ -949,6 +1037,50 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 .reveal-group.is-visible > *:nth-child(3) { transition-delay: 0.15s; }
 .reveal-group.is-visible > *:nth-child(4) { transition-delay: 0.2s; }
 .reveal-group.is-visible > *:nth-child(5) { transition-delay: 0.25s; }
+
+/* =============================================================
+   Page transition overlay — GSAP-driven fade between pages
+   (initPageTransitions in main.js). Only shown when JS is
+   available; without it, navigation is a normal hard page load.
+   ============================================================= */
+.page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--navy-dark);
+  opacity: 0;
+  pointer-events: none;
+}
+.js .page-transition { opacity: 1; }
+
+/* =============================================================
+   Film-grain texture overlay — a fixed, faint animated noise
+   layer over the whole site for an editorial/print-premium feel
+   (the brand's flat colour + zero-radius language reads a bit
+   flat otherwise). SVG turbulence noise, stepped position jumps
+   like real film grain. Frozen under reduced motion.
+   ============================================================= */
+.grain-overlay {
+  position: fixed;
+  inset: -60px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: grain-shift 1s steps(4) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay { animation: none; }
+}
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-2%, 3%); }
+  50%  { transform: translate(3%, -2%); }
+  75%  { transform: translate(-3%, -3%); }
+  100% { transform: translate(0, 0); }
+}
 
 /* =============================================================
    Forms

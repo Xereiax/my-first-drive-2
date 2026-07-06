@@ -2,6 +2,11 @@
    MY FIRST DRIVE — Main JavaScript
    ============================================================= */
 
+/* --- GSAP --- */
+if (window.gsap && window.ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 /* --- Config ---
    TODO: Replace WHATSAPP_NUMBER with the actual number (digits only, no + or spaces)
    Format: country code + number, e.g. 447712345678
@@ -329,6 +334,172 @@ function initHeroInteraction() {
 }
 
 /* -------------------------------------------------------
+   Hero dust particles — a few dozen slow-drifting motes over
+   the hero photo, like dust catching light through a car
+   window. Canvas rather than DOM nodes so animating ~35 of them
+   doesn't touch layout. Paused via IntersectionObserver when
+   the hero scrolls out of view, and skipped entirely under
+   reduced motion.
+------------------------------------------------------- */
+function initHeroParticles() {
+  const hero = document.querySelector('.hero');
+  const canvas = hero && hero.querySelector('.hero__particles');
+  if (!hero || !canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let width = 0, height = 0;
+  let particles = [];
+  let raf = null;
+  let lastTs = null;
+  let running = false;
+
+  const PARTICLE_COUNT = 36;
+
+  function makeParticle() {
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: 0.6 + Math.random() * 1.6,
+      speed: 6 + Math.random() * 10,
+      drift: (Math.random() - 0.5) * 8,
+      phase: Math.random() * Math.PI * 2,
+      alpha: 0.15 + Math.random() * 0.35,
+    };
+  }
+
+  function resize() {
+    const rect = hero.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function draw(dt, elapsed) {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => {
+      p.y -= p.speed * dt;
+      p.x += Math.sin(elapsed * 0.6 + p.phase) * p.drift * dt;
+      if (p.y < -10) {
+        p.y = height + 10;
+        p.x = Math.random() * width;
+      }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(243,228,194,${p.alpha})`;
+      ctx.fill();
+    });
+  }
+
+  function loop(ts) {
+    if (lastTs === null) lastTs = ts;
+    const dt = Math.min((ts - lastTs) / 1000, 0.1);
+    const elapsed = ts / 1000;
+    lastTs = ts;
+    draw(dt, elapsed);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    if (running) return;
+    running = true;
+    lastTs = null;
+    raf = requestAnimationFrame(loop);
+  }
+
+  function stop() {
+    running = false;
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+  }
+
+  resize();
+  particles = Array.from({ length: PARTICLE_COUNT }, makeParticle);
+  window.addEventListener('resize', resize, { passive: true });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) start(); else stop();
+    });
+  }, { threshold: 0 });
+  observer.observe(hero);
+}
+
+/* -------------------------------------------------------
+   Hero entrance — staggered GSAP timeline for the eyebrow,
+   title, and sub/actions row on the homepage hero. Falls back
+   to making everything visible immediately if GSAP didn't load
+   or reduced motion is requested (see the .js .hero rules in
+   style.css for the matching no-JS/no-GSAP fallback).
+------------------------------------------------------- */
+function initHeroEntrance() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  const eyebrow = hero.querySelector('.hero__eyebrow');
+  const title   = hero.querySelector('.hero__title');
+  const row     = hero.querySelector('.hero__row');
+  const targets = [eyebrow, title, row].filter(Boolean);
+  if (!targets.length) return;
+
+  if (!window.gsap || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    targets.forEach(el => { el.style.opacity = '1'; });
+    return;
+  }
+
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+  if (eyebrow) tl.fromTo(eyebrow, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.55 });
+  if (title)   tl.fromTo(title,   { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.35');
+  if (row)     tl.fromTo(row,     { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4');
+}
+
+/* -------------------------------------------------------
+   Page-to-page transitions — a fixed overlay fades out on
+   load and fades in over internal same-tab link clicks before
+   navigating. Skips WhatsApp/external/anchor/new-tab links and
+   modified clicks so those keep their normal behaviour. Falls
+   back to plain navigation if GSAP isn't available or reduced
+   motion is requested.
+------------------------------------------------------- */
+function initPageTransitions() {
+  const overlay = document.querySelector('.page-transition');
+  if (!overlay) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!window.gsap || reduceMotion) {
+    overlay.style.display = 'none';
+    return;
+  }
+
+  gsap.to(overlay, {
+    opacity: 0, duration: 0.5, ease: 'power2.out', delay: 0.05,
+    onComplete: () => { overlay.style.pointerEvents = 'none'; },
+  });
+
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+    if (link.target === '_blank' || link.hasAttribute('data-whatsapp')) return;
+    if (/^(https?:|mailto:|tel:)/i.test(href)) return;
+
+    link.addEventListener('click', e => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      overlay.style.pointerEvents = 'auto';
+      gsap.to(overlay, {
+        opacity: 1, duration: 0.35, ease: 'power2.in',
+        onComplete: () => { window.location.href = href; },
+      });
+    });
+  });
+}
+
+/* -------------------------------------------------------
    Announcement bar
 ------------------------------------------------------- */
 function initAnnouncementBar() {
@@ -402,25 +573,58 @@ function initScrollCard() {
 }
 
 /* -------------------------------------------------------
-   Scroll-triggered reveal
+   Scroll-triggered reveal — GSAP ScrollTrigger when
+   available, falling back to the original IntersectionObserver
+   + CSS-transition approach if GSAP didn't load or the visitor
+   prefers reduced motion.
 ------------------------------------------------------- */
 function initScrollReveal() {
-  const elements = document.querySelectorAll('.reveal, .reveal-group');
-  if (!elements.length) return;
+  const singles = document.querySelectorAll('.reveal');
+  const groups  = document.querySelectorAll('.reveal-group');
+  if (!singles.length && !groups.length) return;
 
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-  );
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  elements.forEach(el => observer.observe(el));
+  if (!window.gsap || !window.ScrollTrigger || reduceMotion) {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    singles.forEach(el => observer.observe(el));
+    groups.forEach(el => observer.observe(el));
+    return;
+  }
+
+  singles.forEach(el => {
+    el.style.transition = 'none';
+    gsap.fromTo(el,
+      { opacity: 0, y: 24 },
+      {
+        opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      }
+    );
+  });
+
+  groups.forEach(group => {
+    const items = Array.from(group.children);
+    if (!items.length) return;
+    items.forEach(item => { item.style.transition = 'none'; });
+    gsap.fromTo(items,
+      { opacity: 0, y: 18 },
+      {
+        opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08,
+        scrollTrigger: { trigger: group, start: 'top 88%', once: true },
+      }
+    );
+  });
 }
 
 /* -------------------------------------------------------
@@ -540,66 +744,6 @@ function initParallaxImages() {
     if (!ticking) { requestAnimationFrame(update); ticking = true; }
   }, { passive: true });
   update();
-}
-
-/* -------------------------------------------------------
-   Scroll-reactive marquees — JS/RAF-driven translateX
-   instead of a fixed-speed CSS keyframe loop, so the ticker
-   briefly speeds up in the direction of travel while the
-   visitor is actively scrolling, then eases back to its
-   base speed. Falls back to the CSS keyframe loop (with its
-   own hover-pause) when reduced motion is requested.
-------------------------------------------------------- */
-function initScrollReactiveMarquees() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const tracks = document.querySelectorAll('.marquee__track');
-  if (!tracks.length) return;
-
-  const BASE_SPEED = 40;   // px/s
-  const MAX_BOOST  = 220;  // px/s
-  let lastScrollY = window.scrollY;
-  let scrollVelocity = 0;
-
-  window.addEventListener('scroll', () => {
-    const now = window.scrollY;
-    scrollVelocity += (now - lastScrollY);
-    lastScrollY = now;
-  }, { passive: true });
-
-  tracks.forEach(track => {
-    track.style.animation = 'none';
-    const marquee = track.closest('.marquee');
-    let x = 0;
-    let paused = false;
-    let lastTs = null;
-
-    if (marquee) {
-      marquee.addEventListener('mouseenter', () => { paused = true; });
-      marquee.addEventListener('mouseleave', () => { paused = false; });
-    }
-
-    function loop(ts) {
-      if (lastTs === null) lastTs = ts;
-      const dt = Math.min((ts - lastTs) / 1000, 0.1);
-      lastTs = ts;
-
-      if (!paused) {
-        const boost = Math.min(Math.abs(scrollVelocity) * 1.5, MAX_BOOST);
-        x -= (BASE_SPEED + boost) * dt;
-        const half = track.scrollWidth / 2;
-        if (half > 0 && x <= -half) x += half;
-        track.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`;
-      }
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-  });
-
-  (function decay() {
-    scrollVelocity *= 0.85;
-    requestAnimationFrame(decay);
-  })();
 }
 
 /* -------------------------------------------------------
@@ -780,18 +924,28 @@ function initContactForm() {
    Init
 ------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
+  initPageTransitions();
   initAnnouncementBar();
+  initHeroEntrance();
   initHeroInteraction();
+  initHeroParticles();
   initHeroScrollHint();
   initWhatsAppLinks();
   initNav();
   initMobileNav();
   initTransmissionToggle();
   initScrollCard();
+
+  if (document.querySelector('.areas-grid--home')) {
+    renderCoverageAreas('.areas-grid--home', { limit: 4, showTestCentre: false });
+  }
+  if (document.querySelector('.areas-grid--full')) {
+    renderCoverageAreas('.areas-grid--full', { limit: null, showTestCentre: true });
+  }
+
   initScrollReveal();
   initScrollProgress();
   initParallaxImages();
-  initScrollReactiveMarquees();
   initActiveNav();
   initStatsCounter();
   initCustomCursor();
@@ -800,11 +954,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticButtons();
   initLessonExpand();
   initCompareSelect();
-
-  if (document.querySelector('.areas-grid--home')) {
-    renderCoverageAreas('.areas-grid--home', { limit: 4, showTestCentre: false });
-  }
-  if (document.querySelector('.areas-grid--full')) {
-    renderCoverageAreas('.areas-grid--full', { limit: null, showTestCentre: true });
-  }
 });
