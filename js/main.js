@@ -481,20 +481,27 @@ function initParallaxPhotos() {
    GSAP pin-and-scrub pattern for this effect.
 ------------------------------------------------------- */
 function initAboutTeachScroll() {
+  const pinWrap = document.querySelector('[data-teach-pin]');
   const stage = document.querySelector('[data-teach-stage]');
   const track = document.querySelector('[data-teach-track]');
   const cards = document.querySelectorAll('[data-teach-card]');
   const progress = document.querySelector('[data-teach-progress]');
-  if (!stage || !track || !cards.length) return;
+  if (!pinWrap || !stage || !track || !cards.length) return;
   if (!window.gsap || !window.ScrollTrigger) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!window.matchMedia('(min-width: 900px)').matches) return;
 
   stage.classList.add('about-teach__stage--active');
 
-  const getScrollDistance = () => Math.max(0, track.scrollWidth - stage.clientWidth);
+  // Computed once and cached rather than re-measured live from inside
+  // the ScrollTrigger's end/onUpdate callbacks — GSAP can call those
+  // mid-pin (e.g. during its own refresh pass), and re-measuring a
+  // pinned (position: fixed) element at that point corrupts the pin's
+  // start/end range. A plain resize listener below handles the one
+  // case that actually needs a fresh measurement.
+  let distance = Math.max(0, track.scrollWidth - stage.clientWidth);
 
-  if (getScrollDistance() < 40) {
+  if (distance < 40) {
     // Cards don't actually overflow the stage (e.g. very few cards on
     // a narrow-ish desktop) — a pin here would just eat scroll for no
     // visual payoff, so fall back to the plain wrapping grid instead.
@@ -502,22 +509,33 @@ function initAboutTeachScroll() {
     return;
   }
 
-  ScrollTrigger.create({
-    trigger: stage,
+  const st = ScrollTrigger.create({
+    // Pin the heading + stage together (not just the stage) so the
+    // "Calm, structured, patient..." heading stays on screen for the
+    // whole card sequence instead of having already scrolled past by
+    // the time the horizontal scroll kicks in.
+    trigger: pinWrap,
     start: 'top 90px',
-    end: () => '+=' + (getScrollDistance() + window.innerHeight * 0.4),
+    end: () => '+=' + (distance + window.innerHeight * 0.4),
     pin: true,
     scrub: 0.6,
-    invalidateOnRefresh: true,
     onUpdate: self => {
-      const dist = getScrollDistance();
-      track.style.transform = `translate3d(${(-dist * self.progress).toFixed(1)}px, 0, 0)`;
+      track.style.transform = `translate3d(${(-distance * self.progress).toFixed(1)}px, 0, 0)`;
       const active = Math.min(cards.length - 1, Math.floor(self.progress * cards.length));
       cards.forEach((card, i) => card.classList.toggle('is-active', i === active));
       if (progress) {
         progress.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(cards.length).padStart(2, '0');
       }
     },
+  });
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      distance = Math.max(0, track.scrollWidth - stage.clientWidth);
+      st.refresh();
+    }, 200);
   });
 }
 
