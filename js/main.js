@@ -430,6 +430,134 @@ function initHeroParticles() {
 }
 
 /* -------------------------------------------------------
+   Asymmetric photo settle-in + parallax drift — used by the
+   About page's instructor feature and pass-certificate section
+   ([data-parallax-el] wrapping a [data-parallax-inner]). Settles
+   the whole block in from a steeper rotation on scroll-in, then
+   (desktop + motion allowed) drifts the inner image slightly as
+   the block scrolls past. No-JS/no-GSAP fallback just rests at
+   the target rotation with no animation.
+------------------------------------------------------- */
+function initParallaxPhotos() {
+  const els = document.querySelectorAll('[data-parallax-el]');
+  if (!els.length) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  els.forEach(el => {
+    const rotateTo = parseFloat(el.dataset.rotateTo || '0');
+
+    if (!window.gsap || !window.ScrollTrigger || reduceMotion) {
+      el.style.transform = `rotate(${rotateTo}deg)`;
+      return;
+    }
+
+    const rotateFrom = parseFloat(el.dataset.rotateFrom || '0');
+    const inner = el.querySelector('[data-parallax-inner]');
+
+    gsap.fromTo(el,
+      { opacity: 0, y: 30, rotate: rotateFrom },
+      {
+        opacity: 1, y: 0, rotate: rotateTo, duration: 0.9, ease: 'power2.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+      }
+    );
+
+    if (inner && window.matchMedia('(min-width: 700px)').matches) {
+      gsap.to(inner, {
+        y: 40, ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
+      });
+    }
+  });
+}
+
+/* -------------------------------------------------------
+   About — "How we teach" pinned horizontal scroll sequence.
+   Desktop + motion-allowed only; mobile and reduced-motion keep
+   the plain wrapping card grid defined in style.css. Pins the
+   stage and drives the track's translateX directly off scroll
+   progress rather than a separate tween, which is the standard
+   GSAP pin-and-scrub pattern for this effect.
+------------------------------------------------------- */
+function initAboutTeachScroll() {
+  const stage = document.querySelector('[data-teach-stage]');
+  const track = document.querySelector('[data-teach-track]');
+  const cards = document.querySelectorAll('[data-teach-card]');
+  const progress = document.querySelector('[data-teach-progress]');
+  if (!stage || !track || !cards.length) return;
+  if (!window.gsap || !window.ScrollTrigger) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(min-width: 900px)').matches) return;
+
+  stage.classList.add('about-teach__stage--active');
+
+  const getScrollDistance = () => Math.max(0, track.scrollWidth - stage.clientWidth);
+
+  if (getScrollDistance() < 40) {
+    // Cards don't actually overflow the stage (e.g. very few cards on
+    // a narrow-ish desktop) — a pin here would just eat scroll for no
+    // visual payoff, so fall back to the plain wrapping grid instead.
+    stage.classList.remove('about-teach__stage--active');
+    return;
+  }
+
+  ScrollTrigger.create({
+    trigger: stage,
+    start: 'top 90px',
+    end: () => '+=' + (getScrollDistance() + window.innerHeight * 0.4),
+    pin: true,
+    scrub: 0.6,
+    invalidateOnRefresh: true,
+    onUpdate: self => {
+      const dist = getScrollDistance();
+      track.style.transform = `translate3d(${(-dist * self.progress).toFixed(1)}px, 0, 0)`;
+      const active = Math.min(cards.length - 1, Math.floor(self.progress * cards.length));
+      cards.forEach((card, i) => card.classList.toggle('is-active', i === active));
+      if (progress) {
+        progress.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(cards.length).padStart(2, '0');
+      }
+    },
+  });
+}
+
+/* -------------------------------------------------------
+   About — side-rail scroll stepper. Highlights the chapter
+   currently centred in the viewport and smooth-scrolls to a
+   section on click. Plain IntersectionObserver rather than
+   GSAP, so it still works if GSAP fails to load.
+------------------------------------------------------- */
+function initAboutRail() {
+  const rail = document.querySelector('[data-about-rail]');
+  if (!rail) return;
+
+  const dots = Array.from(rail.querySelectorAll('.about-rail__dot'));
+  const sections = dots
+    .map(dot => document.getElementById(dot.dataset.railTarget))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id;
+      dots.forEach(dot => dot.classList.toggle('is-active', dot.dataset.railTarget === id));
+    });
+  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  dots.forEach(dot => {
+    dot.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById(dot.dataset.railTarget);
+      if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+}
+
+/* -------------------------------------------------------
    Hero entrance — staggered GSAP timeline for the eyebrow,
    title, and sub/actions row on the homepage hero. Falls back
    to making everything visible immediately if GSAP didn't load
@@ -954,4 +1082,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticButtons();
   initLessonExpand();
   initCompareSelect();
+  initParallaxPhotos();
+  initAboutTeachScroll();
+  initAboutRail();
 });

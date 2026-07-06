@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -63,9 +63,17 @@
     <a href="contact.html" class="mobile-nav__link">Contact</a>
   </div>
 
+  <nav class="about-rail" aria-label="Page sections" data-about-rail>
+    <a href="#about-intro" class="about-rail__dot is-active" data-rail-target="about-intro"><span>01 Intro</span></a>
+    <a href="#about-team" class="about-rail__dot" data-rail-target="about-team"><span>02 The team</span></a>
+    <a href="#about-teach" class="about-rail__dot" data-rail-target="about-teach"><span>03 How we teach</span></a>
+    <a href="#about-pass" class="about-rail__dot" data-rail-target="about-pass"><span>04 The pass</span></a>
+    <a href="#about-cta" class="about-rail__dot" data-rail-target="about-cta"><span>05 Get in touch</span></a>
+  </nav>
+
   <main id="main-content">
 
-    <section class="section section--tight" style="padding-top:var(--sp-8);">
+    <section class="section section--tight" id="about-intro" style="padding-top:var(--sp-8);">
       <div class="container">
         <div class="section-number">01 — About</div>
         <h1 class="reveal">Learning to drive shouldn't feel like a test from lesson one.</h1>
@@ -73,14 +81,16 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="about-team">
       <div class="container">
         <div class="section-number">02 — The instructor team</div>
-        <div class="instructor-card reveal mt-6">
-          <div class="instructor-card__photo">
-            <img src="images/instructor-student.webp" alt="A My First Drive instructor pointing ahead while a learner driver sits at the wheel on a residential West London street" loading="lazy" width="1600" height="900">
+        <div class="instructor-feature mt-6">
+          <div class="instructor-feature__photo" data-parallax-el data-rotate-from="-6" data-rotate-to="-2">
+            <div class="instructor-feature__photo-inner" data-parallax-inner>
+              <img src="images/instructor-student.webp" alt="A My First Drive instructor pointing ahead while a learner driver sits at the wheel on a residential West London street" loading="lazy" width="1600" height="900">
+            </div>
           </div>
-          <div class="instructor-card__content">
+          <div class="instructor-feature__content">
             <span class="instructor-card__badge">15+ years experience</span>
             <h2>Fifteen-plus years, no fixed syllabus</h2>
             <p class="lede mt-6" style="max-width:none;">Our instructor team brings over 15 years of combined teaching experience. Every lesson is built around you — not a fixed syllabus you're pushed through regardless of how you're actually doing that week.</p>
@@ -91,35 +101,67 @@
       </div>
     </section>
 
-    <section class="section section--dark">
+    <section class="section section--dark about-teach" id="about-teach">
       <div class="container">
         <div class="section-number">03 — How we teach</div>
         <h2 class="reveal">Calm, structured, patient — deliberately, not by accident</h2>
-        <div data-cursor-block data-cursor-default="Read">
+      </div>
+      <div class="about-teach__stage" data-teach-stage data-cursor-block data-cursor-default="Read">
         <div cursor class="cursor">Read</div>
-        <div class="lesson-grid reveal-group mt-6">
-          <div class="lesson-card tilt-card">
+
+        <svg class="about-teach__sign about-teach__sign--give-way" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <path d="M50 8 L92 88 L8 88 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+        </svg>
+        <svg class="about-teach__sign about-teach__sign--roundabout" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="4"/>
+          <path d="M50 20 A30 30 0 1 1 22 65" fill="none" stroke="currentColor" stroke-width="4"/>
+          <path d="M14 58 L22 65 L30 56" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="about-teach__sign about-teach__sign--plate" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <rect x="10" y="15" width="80" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="4"/>
+          <path d="M35 30 V70 H65" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <div class="about-teach__track" data-teach-track>
+          <div class="lesson-card tilt-card about-teach__card" data-teach-card>
             <span class="lesson-card__tag mono">No rushing</span>
             <h3 class="lesson-card__title">Your pace, not ours</h3>
             <p class="lesson-card__desc">We don't move on to the next thing because a syllabus says to. If something needs another lesson, it gets another lesson.</p>
           </div>
-          <div class="lesson-card tilt-card">
+          <div class="lesson-card tilt-card about-teach__card" data-teach-card>
             <span class="lesson-card__tag mono">Beginners welcome</span>
             <h3 class="lesson-card__title">First time behind the wheel</h3>
             <p class="lesson-card__desc">Never driven before? That's the most common starting point here, not the exception.</p>
           </div>
-          <div class="lesson-card tilt-card">
+          <div class="lesson-card tilt-card about-teach__card" data-teach-card>
             <span class="lesson-card__tag mono">Failed before?</span>
             <h3 class="lesson-card__title">Starting over after a fail</h3>
             <p class="lesson-card__desc">If a previous test or instructor knocked your confidence, we start by rebuilding that — not by drilling manoeuvres harder.</p>
           </div>
         </div>
-        </div>
+        <div class="about-teach__progress mono" data-teach-progress aria-hidden="true">01 / 03</div>
+      </div>
+      <div class="container">
         <p class="lede ink-soft-on-dark mt-6" style="max-width:56ch;">There's no "typical" student here — just people learning at the pace that actually works for them.</p>
       </div>
     </section>
 
-    <section class="quiet-section">
+    <section class="about-pass" id="about-pass">
+      <div class="container about-pass__grid">
+        <div class="about-pass__media" data-parallax-el data-rotate-from="6" data-rotate-to="2">
+          <div class="about-pass__media-inner" data-parallax-inner>
+            <img src="images/pass-cert.webp" alt="A learner driver smiling and holding up her driving test pass certificate beside the car on a residential West London street" loading="lazy" width="928" height="1160">
+          </div>
+        </div>
+        <div class="about-pass__caption reveal">
+          <div class="section-number">04 — The moment it clicks</div>
+          <h2>Every lesson works toward <em style="color:var(--gold);">this moment.</em></h2>
+          <p class="lede mt-6" style="max-width:44ch;">However long it takes to get there, this is what fifteen years of patient, no-rush teaching is actually for.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quiet-section" id="about-cta">
       <div class="quiet-section__img" style="background-image:url('images/car-about.webp')"></div>
       <div class="quiet-section__inner">
         <span class="hero__eyebrow mono">Questions before you book?</span>
@@ -159,6 +201,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="js/main.js?v=3" defer></script>
+  <script src="js/main.js?v=7" defer></script>
 </body>
 </html>

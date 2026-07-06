@@ -910,25 +910,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 .review-card__name { color: var(--ink); font-weight: 600; }
 
 /* =============================================================
-   Instructor spotlight card — same visual grammar as the lesson/
-   booking/review cards (sharp corners, border, top badge slot),
-   sized for a single-instructor operation rather than a team grid.
+   Instructor badge — small mono tag, reused above headings.
    ============================================================= */
-.instructor-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--line-strong);
-  background: var(--white);
-}
-.instructor-card__photo { overflow: hidden; }
-.instructor-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.instructor-card__content {
-  padding: var(--sp-7);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: var(--sp-2);
-}
 .instructor-card__badge {
   display: inline-block;
   font-family: var(--font-mono);
@@ -941,9 +924,215 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 .instructor-card__badge::before { content: '['; margin-right: 0.35em; opacity: 0.55; }
 .instructor-card__badge::after  { content: ']'; margin-left: 0.35em; opacity: 0.55; }
 
+/* =============================================================
+   Instructor feature — asymmetric overlapping photo + content,
+   in place of a flat side-by-side card. The content panel
+   overlaps the photo (negative margin) so the two read as one
+   layered composition rather than two equal boxes. JS
+   (initParallaxPhotos in main.js) settles the photo in from a
+   steeper angle on scroll-in and drifts it slightly on scroll —
+   this block just owns the resting layout and no-JS fallback.
+   ============================================================= */
+.instructor-feature {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+}
+.instructor-feature__photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 30px 50px -20px rgba(23,23,15,0.25);
+}
+.instructor-feature__photo-inner { position: absolute; inset: -6% 0; }
+.instructor-feature__photo-inner img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.08); }
+.instructor-feature__content {
+  position: relative;
+  z-index: 2;
+  background: var(--white);
+  border: 1px solid var(--line-strong);
+  padding: var(--sp-7);
+  margin-left: -8%;
+  box-shadow: 0 20px 40px -24px rgba(23,23,15,0.2);
+}
 @media (max-width: 900px) {
-  .instructor-card { grid-template-columns: 1fr; }
-  .instructor-card__photo { aspect-ratio: 4 / 3; }
+  .instructor-feature { grid-template-columns: 1fr; }
+  .instructor-feature__photo { aspect-ratio: 4 / 3; }
+  .instructor-feature__content { margin-left: 0; margin-top: -10%; }
+}
+
+/* =============================================================
+   About — "How we teach" pinned horizontal scroll sequence.
+   Base state is a plain wrapping flex row (identical to the old
+   lesson-grid) so it works with no JS/GSAP or on mobile. When
+   initAboutTeachScroll() engages (desktop + motion allowed), it
+   adds --active, switching the track to a fixed-width horizontal
+   strip it drives via scroll-scrubbed translateX while the stage
+   is pinned.
+   ============================================================= */
+.about-teach__stage {
+  position: relative;
+  z-index: 0;
+  padding: var(--sp-7) 0;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+}
+.about-teach__track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  padding: 0 var(--sp-5);
+  width: 100%;
+}
+.about-teach__card { flex: 1 1 260px; }
+.about-teach__progress { display: none; }
+
+.about-teach__stage--active {
+  overflow: hidden;
+  /* Shared by track padding and card width below, so the first and
+     last card can be centered in the stage the same way a card in
+     the middle is — see the padding trick underneath. */
+  --teach-card-w: max(340px, 58vw);
+}
+.about-teach__stage--active .about-teach__track {
+  flex-wrap: nowrap;
+  gap: var(--sp-5);
+  /* Padding each end by half the leftover space means translateX-ing
+     the track by its natural scroll distance carries the *centre* of
+     card 1 to the centre of the stage at progress 0, and the centre
+     of the last card to the centre of the stage at progress 1 — i.e.
+     the "active" card is always roughly centred, not left-anchored. */
+  padding: 0 calc((100vw - var(--teach-card-w)) / 2);
+  will-change: transform;
+}
+.about-teach__stage--active .about-teach__card {
+  /* max(), not min/clamp — must stay proportional to viewport width so
+     the 3 cards always overflow it (guaranteeing scroll distance for
+     the pin) by a wide enough margin that each card gets real "on
+     stage" time, even on ultra-wide monitors. */
+  flex: 0 0 var(--teach-card-w);
+  opacity: 0.45;
+  transform: scale(0.94);
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+.about-teach__stage--active .about-teach__card.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+.about-teach__stage--active .about-teach__progress {
+  display: block;
+  position: absolute;
+  bottom: var(--sp-4);
+  right: calc(var(--sp-5) + var(--sp-5));
+  color: var(--gold);
+  opacity: 0.85;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+/* Decorative road-sign line art — fills the otherwise-empty space
+   around the cards during the pinned dwell with on-theme iconography
+   instead of flat navy. Purely decorative (aria-hidden), sits behind
+   the cards, and is intentionally faint so it reads as texture rather
+   than competing with the actual content. */
+.about-teach__sign {
+  position: absolute;
+  z-index: -1;
+  color: var(--gold);
+  opacity: 0.14;
+  pointer-events: none;
+}
+.about-teach__sign--give-way { width: 130px; height: 130px; top: var(--sp-5); left: var(--sp-6); }
+.about-teach__sign--roundabout { width: 150px; height: 150px; bottom: var(--sp-5); right: var(--sp-8); color: var(--navy-mid); opacity: 0.22; }
+.about-teach__sign--plate { width: 110px; height: 110px; top: 55%; right: var(--sp-6); transform: translateY(-50%) rotate(-6deg); }
+@media (max-width: 900px) {
+  .about-teach__sign { display: none; }
+}
+
+/* =============================================================
+   About — "The moment it clicks" pass-certificate beat. Same
+   asymmetric-photo grammar as the instructor feature, mirrored
+   (photo left this time, rotated the opposite way) for variety.
+   ============================================================= */
+.about-pass {
+  padding: var(--sp-9) 0;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+.about-pass__grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: var(--sp-8);
+  align-items: center;
+}
+.about-pass__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  max-width: 420px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 30px 60px -24px rgba(23,23,15,0.3);
+}
+.about-pass__media-inner { position: absolute; inset: -6% 0; }
+.about-pass__media-inner img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.08); }
+.about-pass__caption { max-width: 48ch; }
+@media (max-width: 900px) {
+  .about-pass__grid { grid-template-columns: 1fr; text-align: center; }
+  .about-pass__media { margin-inline: auto; }
+  .about-pass__caption { max-width: none; }
+}
+
+/* =============================================================
+   About — side-rail scroll stepper. Desktop only; shows which
+   chapter is in view (initAboutRail in main.js toggles is-active
+   via IntersectionObserver) and jumps to a section on click.
+   ============================================================= */
+.about-rail {
+  position: fixed;
+  right: var(--sp-5);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.about-rail__dot {
+  position: relative;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+.about-rail__dot span {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  background: var(--paper);
+  padding: 0.15em 0.5em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out);
+}
+.about-rail__dot:hover span,
+.about-rail__dot.is-active span { opacity: 1; }
+.about-rail__dot.is-active { background: var(--gold); border-color: var(--gold); }
+@media (max-width: 1100px) {
+  .about-rail { display: none; }
+}
+
+#about-intro, #about-team, #about-teach, #about-pass, #about-cta {
+  scroll-margin-top: 90px;
 }
 
 /* =============================================================
