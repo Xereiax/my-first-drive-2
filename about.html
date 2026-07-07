@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
@@ -54,7 +54,7 @@
     </div>
   </header>
 
-  <div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav" id="mobile-nav" inert>
     <button type="button" class="mobile-nav__close mono">Close ✕</button>
     <a href="index.html" class="mobile-nav__link">Home</a>
     <a href="about.html" class="mobile-nav__link" aria-current="page">About</a>
@@ -108,7 +108,7 @@
         <h2 class="reveal">Calm, structured, patient — deliberately, not by accident</h2>
       </div>
       <div class="about-teach__stage" data-teach-stage data-cursor-block data-cursor-default="Read">
-        <div cursor class="cursor">Read</div>
+        <div cursor class="cursor" aria-hidden="true">Read</div>
 
         <svg class="about-teach__sign about-teach__sign--give-way" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <path d="M50 8 L92 88 L8 88 Z" fill="none" stroke="currentColor" stroke-width="4"/>
@@ -203,6 +203,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="js/main.js?v=13" defer></script>
+  <script src="js/main.js?v=15" defer></script>
 </body>
 </html>

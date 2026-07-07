@@ -148,6 +148,7 @@ function initMobileNav() {
     const isOpen = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!isOpen));
     mobileNav.classList.toggle('is-open', !isOpen);
+    mobileNav.inert = isOpen;
     document.body.style.overflow = isOpen ? '' : 'hidden';
   });
 
@@ -155,6 +156,7 @@ function initMobileNav() {
     el.addEventListener('click', () => {
       toggle.setAttribute('aria-expanded', 'false');
       mobileNav.classList.remove('is-open');
+      mobileNav.inert = true;
       document.body.style.overflow = '';
     });
   });
@@ -163,6 +165,7 @@ function initMobileNav() {
     if (e.key === 'Escape' && mobileNav.classList.contains('is-open')) {
       toggle.setAttribute('aria-expanded', 'false');
       mobileNav.classList.remove('is-open');
+      mobileNav.inert = true;
       document.body.style.overflow = '';
       toggle.focus();
     }
@@ -655,12 +658,8 @@ function initAnnouncementBar() {
   const bar = document.getElementById('announcement-bar');
   if (!bar) return;
 
-  const h = bar.offsetHeight;
-  document.documentElement.style.setProperty('--bar-h', h + 'px');
-
   if (sessionStorage.getItem('bar-dismissed')) {
     bar.style.display = 'none';
-    document.documentElement.style.setProperty('--bar-h', '0px');
     return;
   }
 
@@ -669,7 +668,7 @@ function initAnnouncementBar() {
 
   closeBtn.addEventListener('click', () => {
     bar.classList.add('is-dismissed');
-    document.documentElement.style.setProperty('--bar-h', '0px');
+    bar.inert = true;
     sessionStorage.setItem('bar-dismissed', '1');
   });
 }

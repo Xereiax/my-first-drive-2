@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=13">
+  <link rel="stylesheet" href="css/style.css?v=15">
 
   <!-- Local Business structured data — TODO: fill in phone/URL once confirmed -->
   <script type="application/ld+json">
@@ -80,7 +80,7 @@
     </div>
   </header>
 
-  <div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav" id="mobile-nav" inert>
     <button type="button" class="mobile-nav__close mono">Close ✕</button>
     <a href="index.html" class="mobile-nav__link" aria-current="page">Home</a>
     <a href="about.html" class="mobile-nav__link">About</a>
@@ -179,7 +179,7 @@
         </div>
 
         <div data-cursor-block data-cursor-default="Expand">
-        <div cursor class="cursor">Expand</div>
+        <div cursor class="cursor" aria-hidden="true">Expand</div>
         <div class="lesson-grid reveal-group">
           <div class="lesson-card lesson-card--featured lesson-card--beginner tilt-card">
             <span class="lesson-card__tag mono">Most requested</span>
@@ -299,7 +299,7 @@
       </div>
 
       <div class="marquee" data-cursor-block>
-        <div cursor class="cursor" data-cursor-default="Read">Read</div>
+        <div cursor class="cursor" aria-hidden="true" data-cursor-default="Read">Read</div>
         <div class="marquee__track">
           <div class="marquee__group">
             <span class="marquee__item" data-cursor-text="Read" style="font-size:1.1rem;text-transform:none;font-family:var(--font-body);font-weight:400;">"Amazing instructor — Enam helped me pass first time with only 2 driving faults!" <small>Jamil C. · ★★★★★</small></span>
@@ -327,13 +327,13 @@
         </div>
 
         <div data-cursor-block data-cursor-default="Expand">
-        <div cursor class="cursor">Expand</div>
+        <div cursor class="cursor" aria-hidden="true">Expand</div>
         <div class="areas-grid areas-grid--home reveal-group" aria-label="Coverage areas preview"></div>
         </div>
       </div>
 
       <div class="marquee" aria-hidden="true" data-cursor-block data-cursor-default="View">
-        <div cursor class="cursor">View</div>
+        <div cursor class="cursor" aria-hidden="true">View</div>
         <div class="marquee__track">
           <div class="marquee__group">
             <span class="marquee__item">Hounslow <small>TW3</small></span>
@@ -372,7 +372,7 @@
         <h2 class="mt-6" style="margin-bottom:2rem;">Flexible booking, no pressure</h2>
 
         <div data-cursor-block data-cursor-default="Enquire">
-        <div cursor class="cursor">Enquire</div>
+        <div cursor class="cursor" aria-hidden="true">Enquire</div>
         <div class="booking-grid reveal-group">
           <div class="booking-card tilt-card">
             <span class="booking-card__badge">Better value</span>
@@ -442,6 +442,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="js/main.js?v=13" defer></script>
+  <script src="js/main.js?v=15" defer></script>
 </body>
 </html>
