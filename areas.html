@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=12">
 </head>
 <body>
 
@@ -69,7 +69,14 @@
       <div class="container">
         <div class="section-number">01 — Areas we cover</div>
         <h1 class="reveal">Ten towns. Click one to find out what lessons there actually look like.</h1>
-        <p class="lede reveal mt-6" style="max-width:60ch;">Every area below is covered door to door — not just "technically in range." Open a town for what the roads are actually like and its nearest DVSA test centre.</p>
+        <div class="areas-intro mt-6">
+          <p class="lede reveal" style="max-width:60ch;">Every area below is covered door to door — not just "technically in range." Open a town for what the roads are actually like and its nearest DVSA test centre.</p>
+          <div class="areas-intro__photo" data-parallax-el data-rotate-from="5" data-rotate-to="2">
+            <div class="areas-intro__photo-inner" data-parallax-inner>
+              <img src="images/street-areas.webp" alt="A quiet tree-lined residential street in West London, typical of the roads covered on lessons" loading="lazy" width="1376" height="768">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -82,12 +89,13 @@
       </div>
     </section>
 
-    <section class="section section--dark">
-      <div class="container text-center">
-        <div class="section-number" style="justify-content:center;">02 — Not on the list?</div>
-        <h2 class="reveal">Just outside these ten? Ask anyway.</h2>
+    <section class="quiet-section">
+      <div class="quiet-section__img" style="background-image:url('images/street-coverage.webp')"></div>
+      <div class="quiet-section__inner">
+        <span class="hero__eyebrow mono">02 — Not on the list?</span>
+        <h2>Just outside these ten? <em style="color:var(--gold);">Ask anyway.</em></h2>
         <p class="lede ink-soft-on-dark mt-6" style="max-width:52ch;margin-inline:auto;">Coverage grows as the instructor team does. If you're just outside these ten areas, message us — we may still be able to help.</p>
-        <a href="#" class="btn-bracket mt-6" data-whatsapp style="color:var(--paper);font-size:1.3rem;">Ask on WhatsApp</a>
+        <a href="#" class="btn-bracket mt-6" data-whatsapp style="font-size:1.3rem;">Ask on WhatsApp</a>
       </div>
     </section>
 
@@ -122,6 +130,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="js/main.js?v=12" defer></script>
+  <script src="js/main.js?v=13" defer></script>
 </body>
 </html>

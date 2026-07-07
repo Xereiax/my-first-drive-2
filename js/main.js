@@ -200,10 +200,10 @@ function renderCoverageAreas(containerSelector, options = {}) {
   const areas = limit ? COVERAGE_AREAS.slice(0, limit) : COVERAGE_AREAS;
 
   container.innerHTML = areas.map((area, i) => {
-    const testCentreHTML = showTestCentre
+    const testCentreHTML = showTestCentre && area.testCentre
       ? `<div class="area-card__testcentre">
           <span class="area-card__testcentre-label">Nearest test centre</span>
-          ${area.testCentre ? area.testCentre : 'To be confirmed — verifying with DVSA'}
+          ${area.testCentre}
         </div>`
       : '';
 
@@ -220,6 +220,7 @@ function renderCoverageAreas(containerSelector, options = {}) {
             <span class="area-card__postcode">${area.postcode}</span>
             <span class="area-card__region">${area.region}</span>
           </div>
+          <div class="area-card__leader" aria-hidden="true"></div>
           <div class="area-card__toggle" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
