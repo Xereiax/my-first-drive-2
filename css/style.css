@@ -942,7 +942,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; text-transform:
 .review-card__badge::before { content: '['; margin-right: 0.35em; opacity: 0.55; }
 .review-card__badge::after  { content: ']'; margin-left: 0.35em; opacity: 0.55; }
 .review-card__quote { font-size: 1.05rem; }
-.review-card__meta { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--ink-soft); letter-spacing: 0.04em; }
+.review-card__meta { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: var(--ink-soft); letter-spacing: 0.04em; margin-top: auto; }
 .review-card__name { color: var(--ink); font-weight: 600; }
 
 /* =============================================================
